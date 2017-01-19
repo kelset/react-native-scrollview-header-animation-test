@@ -1,0 +1,3 @@
+rootProject.name = 'scrollview_header_animation_test'
+
+include ':app'
