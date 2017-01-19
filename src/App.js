@@ -50,6 +50,18 @@ class App extends Component {
       extrapolate: 'clamp',
     });
 
+    const imageOpacity = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [1, 1, 0],
+      extrapolate: 'clamp',
+    });
+
+    const imageTranslate = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      outputRange: [0, -50],
+      extrapolate: 'clamp',
+    });
+
     return (
       <View style={styles.fill}>
         <ScrollView
@@ -62,9 +74,18 @@ class App extends Component {
           {this._renderScrollViewContent()}
         </ScrollView>
         <Animated.View style={[styles.header, {height: headerHeight}]}>
-          <View style={styles.bar}>
-            <Text style={styles.title}>Title</Text>
-          </View>
+          <Animated.Image
+            style={[
+              styles.backgroundImage,
+              {opacity: imageOpacity, transform: [{translateY: imageTranslate}]},
+            ]}
+            source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
+          />
+          <Animated.View>
+            <View style={styles.bar}>
+              <Text style={styles.title}>Title</Text>
+            </View>
+          </Animated.View>
         </Animated.View>
       </View>
     );
@@ -109,6 +130,16 @@ const styles = StyleSheet.create({
 
   scrollViewContent: {
     marginTop: HEADER_MAX_HEIGHT,
+  },
+
+  backgroundImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    width: null,
+    height: HEADER_MAX_HEIGHT,
+    resizeMode: 'cover',
   },
 });
 
