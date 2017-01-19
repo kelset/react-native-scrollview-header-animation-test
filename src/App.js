@@ -44,6 +44,18 @@ class App extends Component {
       extrapolate: 'clamp',
     });
 
+    const imageContainerFlexHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE],
+      outputRange: [190, 0.1],
+      extrapolate: 'clamp',
+    });
+
+    const barFlexHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE],
+      outputRange: [110, 300],
+      extrapolate: 'clamp',
+    });
+
     const imageOpacityViaFlex = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE / 2, HEADER_FLEX_SCROLL_DISTANCE],
       outputRange: [1, 1, 0],
@@ -60,17 +72,17 @@ class App extends Component {
       <View style={styles.fill}>
 
         <Animated.View style={[styles.header, {flex: headerFlexHeight}]}>
-          <Animated.Image
-            style={[
-              styles.backgroundImage,
-              {opacity: imageOpacityViaFlex, transform: [{translateY: imageTranslateViaFlex}]},
-            ]}
-            source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
-          />
-          <Animated.View>
-            <View style={styles.bar}>
+          <Animated.View style={[styles.image_container, {flex: imageContainerFlexHeight}]}>
+            <Animated.Image
+              style={[
+                styles.backgroundImage,
+                {opacity: imageOpacityViaFlex, transform: [{translateY: imageTranslateViaFlex}]},
+              ]}
+              source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
+            />
+          </Animated.View>
+          <Animated.View style={[styles.bar, {flex: barFlexHeight}]}>
               <Text style={styles.title}>Title</Text>
-            </View>
           </Animated.View>
         </Animated.View>
 
@@ -103,11 +115,14 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#03A9F4',
     overflow: 'hidden',
+    // alignItems: "center"
   },
 
   bar: {
-    marginTop: 28,
-    height: 32,
+    // flex:150,
+    // marginTop: 28,
+    // height: 32,
+    // backgroundColor: "red",
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -118,14 +133,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
+  image_container: {
+    // flex:150,
+    // marginTop: 28,
+    // height: 32,
+    // backgroundColor: "gold",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
   backgroundImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    width: null,
-    height: HEADER_MAX_HEIGHT,
-    resizeMode: 'cover',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    // flex:150,
   },
 });
 
