@@ -56,6 +56,12 @@ class App extends Component {
       extrapolate: 'clamp',
     });
 
+    const imageFlexHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE],
+      outputRange: [100, 0],
+      extrapolate: 'clamp',
+    });
+
     const imageOpacityViaFlex = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE / 2, HEADER_FLEX_SCROLL_DISTANCE],
       outputRange: [1, 1, 0],
@@ -72,18 +78,38 @@ class App extends Component {
       <View style={styles.fill}>
 
         <Animated.View style={[styles.header, {flex: headerFlexHeight}]}>
-          <Animated.View style={[styles.image_container, {flex: imageContainerFlexHeight}]}>
-            <Animated.Image
-              style={[
-                styles.backgroundImage,
-                {opacity: imageOpacityViaFlex, transform: [{translateY: imageTranslateViaFlex}]},
-              ]}
-              source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
+          <View style={styles.header_lateral_column}>
+            <Image
+              style={styles.icon}
+              resizeMode={Image.resizeMode.contain}
+              source={require('./icons/login.png')}
             />
-          </Animated.View>
-          <Animated.View style={[styles.bar, {flex: barFlexHeight}]}>
-              <Text style={styles.title}>Title</Text>
-          </Animated.View>
+          </View>
+
+          <View style={styles.header_central_column}>
+            <Animated.View style={[styles.image_container, {flex: imageContainerFlexHeight}]}>
+              <Animated.Image
+                style={[
+                  styles.backgroundImage,
+                  {opacity: imageOpacityViaFlex, transform: [{translateY: imageTranslateViaFlex}]},
+                ]}
+                source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
+              />
+
+            </Animated.View>
+            <Animated.View style={[styles.bar, {flex: barFlexHeight}]}>
+                <Text style={styles.title}>Title</Text>
+            </Animated.View>
+          </View>
+
+          <View style={styles.header_lateral_column}>
+            <Image
+              style={styles.icon}
+              resizeMode={Image.resizeMode.contain}
+              source={require('./icons/label.png')}
+            />
+          </View>
+
         </Animated.View>
 
         <View style={{flex: 700}}>
@@ -115,13 +141,24 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#03A9F4',
     overflow: 'hidden',
+    flexDirection: "row"
+  },
+
+  header_lateral_column: {
+    flex:0.1,
+    paddingTop: 20,
+    paddingHorizontal: 5,
+    // justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "coral",
+  },
+
+  header_central_column: {
+    flex: 0.8,
     // alignItems: "center"
   },
 
   bar: {
-    // flex:150,
-    // marginTop: 28,
-    // height: 32,
     // backgroundColor: "red",
     alignItems: 'center',
     justifyContent: 'center',
@@ -134,20 +171,22 @@ const styles = StyleSheet.create({
   },
 
   image_container: {
-    // flex:150,
-    // marginTop: 28,
-    // height: 32,
     // backgroundColor: "gold",
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center"
   },
 
   backgroundImage: {
+    marginTop:5,
     width: 100,
     height: 100,
     borderRadius: 50,
-    // flex:150,
   },
+
+  icon: {
+    width: 30,
+    height: 30,
+  },
+
 });
 
 export default App
