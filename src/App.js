@@ -14,10 +14,6 @@ import {
 
 import CustomScrollView from './CustomScrollView'
 
-const HEADER_MAX_HEIGHT = 200;
-const HEADER_MIN_HEIGHT = 60;
-const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-
 const HEADER_MAX_FLEX = 300;
 const HEADER_MIN_FLEX = 100;
 const HEADER_FLEX_SCROLL_DISTANCE = HEADER_MAX_FLEX - HEADER_MIN_FLEX;
@@ -62,15 +58,27 @@ class App extends Component {
       extrapolate: 'clamp',
     });
 
-    const imageOpacityViaFlex = this.state.scrollY.interpolate({
+    const imageOpacity = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE / 2, HEADER_FLEX_SCROLL_DISTANCE],
       outputRange: [1, 1, 0],
       extrapolate: 'clamp',
     });
 
-    const imageTranslateViaFlex = this.state.scrollY.interpolate({
+    const imageScale = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE],
-      outputRange: [0, -50],
+      outputRange: [100, 40],
+      extrapolate: 'clamp',
+    });
+
+    const imageTranslateX = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE],
+      outputRange: [0, 150],
+      extrapolate: 'clamp',
+    });
+
+    const imageTranslateY = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE],
+      outputRange: [0, 10],
       extrapolate: 'clamp',
     });
 
@@ -82,7 +90,7 @@ class App extends Component {
             <Image
               style={styles.icon}
               resizeMode={Image.resizeMode.contain}
-              source={require('./icons/login.png')}
+              source={require('./icons/back.png')}
             />
           </View>
 
@@ -91,23 +99,26 @@ class App extends Component {
               <Animated.Image
                 style={[
                   styles.backgroundImage,
-                  {opacity: imageOpacityViaFlex, transform: [{translateY: imageTranslateViaFlex}]},
+                  { //opacity: imageOpacity,
+                    width: imageScale,
+                    height: imageScale,
+                    transform: [{translateX: imageTranslateX}, {translateY: imageTranslateY}]},
                 ]}
                 source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
               />
 
             </Animated.View>
             <Animated.View style={[styles.bar, {flex: barFlexHeight}]}>
-                <Text style={styles.title}>Title</Text>
+                <Text style={styles.title}>Title Title Title</Text>
             </Animated.View>
           </View>
 
           <View style={styles.header_lateral_column}>
-            <Image
+            {/* <Image
               style={styles.icon}
               resizeMode={Image.resizeMode.contain}
               source={require('./icons/label.png')}
-            />
+            /> */}
           </View>
 
         </Animated.View>
@@ -177,8 +188,6 @@ const styles = StyleSheet.create({
 
   backgroundImage: {
     marginTop:5,
-    width: 100,
-    height: 100,
     borderRadius: 50,
   },
 
