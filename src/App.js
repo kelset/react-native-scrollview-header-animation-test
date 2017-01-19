@@ -12,6 +12,8 @@ import {
   View,
 } from 'react-native';
 
+import CustomScrollView from './CustomScrollView'
+
 const HEADER_MAX_HEIGHT = 200;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
@@ -28,19 +30,6 @@ class App extends Component {
     this.state = {
       scrollY: new Animated.Value(0),
     };
-  }
-
-  _renderScrollViewContent() {
-    const data = Array.from({length: 30});
-    return (
-      <View style={styles.scrollViewContent}>
-        {data.map((_, i) =>
-          <View key={i} style={styles.row}>
-            <Text>{i}</Text>
-          </View>
-        )}
-      </View>
-    );
   }
 
   render() {
@@ -64,15 +53,12 @@ class App extends Component {
 
     return (
       <View style={styles.fill}>
-        <ScrollView
-          style={styles.fill}
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
+        <CustomScrollView
+          maxHeight={HEADER_MAX_HEIGHT}
+          animatedEventReference={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
           )}
-        >
-          {this._renderScrollViewContent()}
-        </ScrollView>
+        />
         <Animated.View style={[styles.header, {height: headerHeight}]}>
           <Animated.Image
             style={[
@@ -126,10 +112,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'white',
     fontSize: 18,
-  },
-
-  scrollViewContent: {
-    marginTop: HEADER_MAX_HEIGHT,
   },
 
   backgroundImage: {
