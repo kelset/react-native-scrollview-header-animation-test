@@ -22,4 +22,4 @@
    }
  }
 
-AppRegistry.registerComponent('scrollview_header_animation_test', () => scrollview_header_animation_test);
+AppRegistry.registerComponent('scrollview_header_animation_test', () => App);
