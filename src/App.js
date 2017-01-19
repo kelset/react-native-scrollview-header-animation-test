@@ -19,12 +19,15 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 class App extends Component {
 
   state: {
-      // selected: any;
-      // draw: boolean;
+    scrollY: any;
   };
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      scrollY: new Animated.Value(0),
+    };
   }
 
   _renderScrollViewContent() {
@@ -41,14 +44,24 @@ class App extends Component {
   }
 
   render() {
+    const headerHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+      extrapolate: 'clamp',
+    });
+
     return (
       <View style={styles.fill}>
         <ScrollView
           style={styles.fill}
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
+          )}
         >
           {this._renderScrollViewContent()}
         </ScrollView>
-        <Animated.View style={styles.header}>
+        <Animated.View style={[styles.header, {height: headerHeight}]}>
           <View style={styles.bar}>
             <Text style={styles.title}>Title</Text>
           </View>
