@@ -27,7 +27,7 @@ class CustomScrollView extends Component {
   _renderScrollViewContent() {
     const data = Array.from({length: 30});
     return (
-      <View style={{marginTop: this.props.maxHeight}}>
+      <View>
         {data.map((_, i) =>
           <View key={i} style={styles.row}>
             <Text>{i}</Text>

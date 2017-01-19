@@ -18,6 +18,10 @@ const HEADER_MAX_HEIGHT = 200;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
+const HEADER_MAX_FLEX = 300;
+const HEADER_MIN_FLEX = 100;
+const HEADER_FLEX_SCROLL_DISTANCE = HEADER_MAX_FLEX - HEADER_MIN_FLEX;
+
 class App extends Component {
 
   state: {
@@ -33,37 +37,33 @@ class App extends Component {
   }
 
   render() {
-    const headerHeight = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+    // FLEX
+    const headerFlexHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE],
+      outputRange: [HEADER_MAX_FLEX, HEADER_MIN_FLEX],
       extrapolate: 'clamp',
     });
 
-    const imageOpacity = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+    const imageOpacityViaFlex = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE / 2, HEADER_FLEX_SCROLL_DISTANCE],
       outputRange: [1, 1, 0],
       extrapolate: 'clamp',
     });
 
-    const imageTranslate = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE],
+    const imageTranslateViaFlex = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_FLEX_SCROLL_DISTANCE],
       outputRange: [0, -50],
       extrapolate: 'clamp',
     });
 
     return (
       <View style={styles.fill}>
-        <CustomScrollView
-          maxHeight={HEADER_MAX_HEIGHT}
-          animatedEventReference={Animated.event(
-            [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
-          )}
-        />
-        <Animated.View style={[styles.header, {height: headerHeight}]}>
+
+        <Animated.View style={[styles.header, {flex: headerFlexHeight}]}>
           <Animated.Image
             style={[
               styles.backgroundImage,
-              {opacity: imageOpacity, transform: [{translateY: imageTranslate}]},
+              {opacity: imageOpacityViaFlex, transform: [{translateY: imageTranslateViaFlex}]},
             ]}
             source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
           />
@@ -73,6 +73,14 @@ class App extends Component {
             </View>
           </Animated.View>
         </Animated.View>
+
+        <View style={{flex: 700}}>
+          <CustomScrollView
+            animatedEventReference={Animated.event(
+              [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
+            )}
+          />
+        </View>
       </View>
     );
   }
@@ -93,12 +101,8 @@ const styles = StyleSheet.create({
 
   // HEADER RELATED
   header: {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  backgroundColor: '#03A9F4',
-  overflow: 'hidden',
+    backgroundColor: '#03A9F4',
+    overflow: 'hidden',
   },
 
   bar: {
