@@ -4,12 +4,17 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
+  Animated,
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
   View,
-  Button
 } from 'react-native';
+
+const HEADER_MAX_HEIGHT = 200;
+const HEADER_MIN_HEIGHT = 60;
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 class App extends Component {
 
@@ -22,31 +27,75 @@ class App extends Component {
     super(props);
   }
 
-  render() {
+  _renderScrollViewContent() {
+    const data = Array.from({length: 30});
     return (
-      <View style={{flex:1, justifyContent: "space-around"}}>
-        <Text style={{fontSize: 20, color:"black", alignSelf:"center"}}> This is a simple test for Animation</Text>
+      <View style={styles.scrollViewContent}>
+        {data.map((_, i) =>
+          <View key={i} style={styles.row}>
+            <Text>{i}</Text>
+          </View>
+        )}
       </View>
     );
   }
+
+  render() {
+    return (
+      <View style={styles.fill}>
+        <ScrollView
+          style={styles.fill}
+        >
+          {this._renderScrollViewContent()}
+        </ScrollView>
+        <Animated.View style={styles.header}>
+          <View style={styles.bar}>
+            <Text style={styles.title}>Title</Text>
+          </View>
+        </Animated.View>
+      </View>
+    );
+  }
+
 }
 
 const styles = StyleSheet.create({
-  container: {
+  fill: {
     flex: 1,
-    justifyContent: 'center',
+  },
+  row: {
+    height: 40,
+    margin: 16,
+    backgroundColor: '#D3D3D3',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: 'center',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+
+  // HEADER RELATED
+  header: {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  backgroundColor: '#03A9F4',
+  overflow: 'hidden',
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+
+  bar: {
+    marginTop: 28,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  title: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 18,
+  },
+
+  scrollViewContent: {
+    marginTop: HEADER_MAX_HEIGHT,
   },
 });
 
